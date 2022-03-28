@@ -1,0 +1,65 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@progress/kendo-react-dateinputs": "^4.5.0",
+    "@progress/kendo-react-treeview": "^4.5.0",
+    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-checkbox-list": "0.0.2",
+    "react-cookie": "^3.0.4",
+    "react-datepicker": "^3.8.0",
+    "react-dom": "^17.0.2",
+    "react-flags": "^0.1.18",
+    "react-image-file-resizer": "^0.4.3",
+    "react-redux": "^7.2.3",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^4.0.3",
+    "react-toastify": "^7.0.4",
+    "react-validation": "^3.0.7",
+    "reactstrap": "^6.5.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "validator": "^13.5.2",
+    "web-vitals": "^1.1.1"
+  },
+  "scripts": {
+    "start": "set PORT=4200 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:8080",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.9"
+  }
+}
