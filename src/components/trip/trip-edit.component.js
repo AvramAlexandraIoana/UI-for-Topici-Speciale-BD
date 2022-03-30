@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as moment from 'moment'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import jwt_decode from "jwt-decode";
 
 
 
@@ -32,13 +33,23 @@ class TripEdit extends Component {
         this.state = {
             item: this.emptyItem,
             agencyList: [],
-            locationList: []
+            locationList: [],
+            userRoles: [],
+            userId: null
         };
        this.handleChange = this.handleChange.bind(this);
        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          const decodeUser  = jwt_decode(user.accessToken);
+          this.setState({
+            userRoles: decodeUser.roles,
+            userId: parseFloat(decodeUser.jti)
+          });
+        }
         if (this.props.match.params.id !== 'new') {
           TripService.getTrip(this.props.match.params.id).then(
             response => {
@@ -85,9 +96,14 @@ class TripEdit extends Component {
                 });
             }
         )
-        AgencyService.getAgencyList().then(
+        const userInfo = JSON.parse(localStorage.getItem('user'));
+        if (userInfo) {
+          const decodeUserInfo  = jwt_decode(user.accessToken);
+          const userId = parseFloat(decodeUserInfo.jti);
+        
+          AgencyService.getAgencyList().then(
             response => {
-                this.setState({agencyList: response.data});
+                this.setState({agencyList: response.data.filter((el) => el.userId == userId)});
               },
             error => {
                 this.setState({
@@ -100,6 +116,8 @@ class TripEdit extends Component {
                 });
             }
         );
+        }
+       
     }
 
     handleChange(event) {
@@ -113,7 +131,9 @@ class TripEdit extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        const {item} = this.state;
+        let {item, userId} = this.state;
+        item.userId = userId;
+
         if (!item.id) {
             TripService.createNewTrip(item).then(
                 response => {

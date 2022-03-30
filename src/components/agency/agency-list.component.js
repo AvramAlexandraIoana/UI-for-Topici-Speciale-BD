@@ -11,7 +11,8 @@ class AgencyList extends Component {
         this.state = {
             agencies: [],
             isLoading: true,
-            userRoles: []
+            userRoles: [],
+            userId: null
         };
         this.remove = this.remove.bind(this);
     }
@@ -23,7 +24,9 @@ class AgencyList extends Component {
         if (user) {
           const decodeUser  = jwt_decode(user.accessToken);
           this.setState({
-            userRoles: decodeUser.roles
+            userRoles: decodeUser.roles,
+            userId: parseFloat(decodeUser.jti)
+
           });
         }
 
@@ -68,7 +71,7 @@ class AgencyList extends Component {
     }
 
     render() {
-        const {agencies, isLoading, userRoles} = this.state;
+        const {agencies, isLoading, userRoles, userId} = this.state;
 
         const agencyList = agencies.map(agency => {
             return <tr key={agency.id}>
@@ -81,7 +84,7 @@ class AgencyList extends Component {
                 <td  style={{whiteSpace: 'nowrap'}}>
                     {agency.location.country.countryName}
                 </td>
-                { (userRoles.includes("ROLE_MANAGER") || userRoles.includes("ROLE_ADMIN")) && (
+                { userId == agency.userId && (userRoles.includes("ROLE_MANAGER") || userRoles.includes("ROLE_ADMIN")) && (
                     <td>
                         <Button variant="contained" color="primary" tag={Link} to={"/agency/" + agency.id}
                             style={{marginRight: 10}}>

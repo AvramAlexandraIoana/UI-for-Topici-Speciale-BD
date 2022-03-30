@@ -7,12 +7,14 @@ import LocationService from '../../services/location.service';
 import AgencyService from '../../services/agency.service';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import jwt_decode from "jwt-decode";
 
 
 class AgencyEdit extends Component {
     emptyItem = {
         name: null,
-        location: null
+        location: null,
+        userId: null
     };
     
     constructor(props) {
@@ -20,13 +22,23 @@ class AgencyEdit extends Component {
         this.state = {
             item: this.emptyItem,
             locationList: [],
-            contentError: null
+            contentError: null,
+            userId: null,
+            userRoles: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async componentDidMount() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        const decodeUser  = jwt_decode(user.accessToken);
+        this.setState({
+          userRoles: decodeUser.roles,
+          userId: parseFloat(decodeUser.jti)
+        });
+      }
         if (this.props.match.params.id !== 'new') {
             AgencyService.getAgency(this.props.match.params.id).then(
                 response => {
@@ -74,8 +86,9 @@ class AgencyEdit extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        const {item} = this.state;
-    
+        let {item, userId} = this.state;
+        item.userId = userId;
+
         if (!item.id) {
             AgencyService.createNewAgency(item).then(
               response => {

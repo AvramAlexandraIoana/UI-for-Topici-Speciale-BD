@@ -24,7 +24,9 @@ class TripList extends Component {
         if (user) {
           const decodeUser = jwt_decode(user.accessToken);
           this.setState({
-            userRoles: decodeUser.roles
+            userRoles: decodeUser.roles,
+            userId: parseFloat(decodeUser.jti)
+
           });
         }
 
@@ -88,7 +90,7 @@ class TripList extends Component {
 
 
     render() {
-        const {trips, isLoading, userRoles} = this.state;
+        const {trips, isLoading, userRoles,userId} = this.state;
     
         if (isLoading) {
           return <p>Loading...</p>;
@@ -121,7 +123,7 @@ class TripList extends Component {
                     {trip.location ? trip.location.city : ''}
                 </td>
                 {
-                    (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MANAGER')) &&
+                   userId == trip.userId &&   (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MANAGER')) &&
                     (
                         <td>
                             <Button variant="contained" color="primary" tag={Link} to={"/trip/" + trip.id}
